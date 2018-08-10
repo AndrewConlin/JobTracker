@@ -1,0 +1,57 @@
+<h3 class="file">Uploaded Files: </h3>
+
+<!-- view all contact -->
+<div>
+  <div *ngFor="let file of files">
+    <div class="card file">
+      <div class="card-body">
+        <h5 class="card-title">{{file.name}}
+          <span class="card-subtitle mb-2 text-muted"> {{file.uploadDate}} </span>
+        </h5>
+        <p class="card-text"><em>Link: </em> <a [href]="file.s3Url" target="_blank">{{file.s3Url}}</a></p>
+        <p class="card-text"><em>Description: </em> {{file.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-spinner *ngIf="fileUploading"></mat-spinner>
+
+<!-- upload file modal -->
+<div class="fileAdd">
+  <ng-template #content let-c="close()" let-d="dismiss()">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Upload File</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #uploadFileForm="ngForm">
+          <div class="form-group">
+            <label for="firstName">Name</label>
+            <div class="input-group">
+              <input id="firstName" class="form-control" name="name" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <div class="input-group">
+              <input id="description" class="form-control" name="description" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+              <label for="file" class="btn btn-primary btn-file">Browse Files</label>
+              <div class="input-group">
+                <input id="file" type="file" style="display: none;" class="form-control" name="file" ngModel (change)="fileEvent($event)">
+              </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="uploadFile(uploadFileForm); c;">Save</button>
+      </div>
+    </ng-template>
+
+    <button class="btn btn-success" (click)="open(content)">Upload File</button>
+  </div>

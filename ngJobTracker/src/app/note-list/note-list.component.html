@@ -1,0 +1,68 @@
+<!-- view all notes -->
+<div *ngIf="!editNote">
+  <div *ngFor="let note of notes">
+      <div class="card notes">
+          <div class="card-body">
+            <h5 class="card-title">{{job.company.name}} <span>({{job.title}})</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{note.createDate}}</h6>
+            <p class="card-text">{{note.content}}</p>
+            <button class="btn btn-primary" (click)="editNote = note">Edit</button>
+          </div>
+        </div>
+  </div>
+</div>
+
+<!-- edit detail -->
+<div *ngIf="editNote">
+  <div *ngFor="let note of notes">
+    <div class="card notes" *ngIf="editNote.id !== note.id"> <!-- div for non edit notes  -->
+      <div class="card-body">
+          <h5 class="card-title">{{job.company.name}} <span>({{job.title}})</span></h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{note.createDate}}</h6>
+          <p class="card-text">{{note.content}}</p>
+          <button class="btn btn-primary" (click)="editNote = note" disabled>Edit</button>
+        </div>
+    </div>
+    <div class="card notes" *ngIf="editNote.id === note.id"> <!-- div for note to edit -->
+        <div class="card-body">
+          <h5 class="card-title">{{job.company.name}} <span>({{job.title}})</span></h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{editNote.createDate}}</h6>
+          <div class="card-text">
+            <form #editNoteForm="ngForm" class="example-form">
+              <mat-form-field class="example-full-width">
+                <textarea matInput placeholder="Note" name="content" [ngModel]="editNote.content"></textarea>
+              </mat-form-field>
+            </form>
+          </div>
+          <button class="btn btn-success" (click)="updateNote(editNoteForm)">Save</button>
+          <button class="btn btn-danger" (click)="editNote = null">Cancel</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- create note modal -->
+<div class="noteAdd">
+  <ng-template #content let-c="close()" let-d="dismiss()">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">New Note</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #createNoteForm="ngForm">
+          <div class="form-group">
+            <label for="content">Content</label>
+            <div class="input-group">
+              <textarea id="content" class="form-control" name="content" ngModel rows="8" cols="50"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="createNote(createNoteForm); c;">Save</button>
+      </div>
+    </ng-template>
+
+    <button class="btn btn-success" (click)="open(content)">+ Add Note</button>
+  </div>

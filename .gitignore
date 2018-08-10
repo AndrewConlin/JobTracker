@@ -1,0 +1,23 @@
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+
+.DS_Store
+target
+build
+bin
+.metadata
+.gradle
+Servers
+.recommenders
+
+*.properties

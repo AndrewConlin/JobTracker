@@ -1,0 +1,47 @@
+.tabContent {
+  padding: 2%;
+}
+
+.interested {
+  background-color: #4c76d0 !important;
+}
+.applied {
+  background-color: #73d873 !important;
+}
+.interviewing {
+  background-color: #73d873 !important;
+}
+.offered {
+  background-color: #057605 !important;
+}
+.rejected {
+  background-color: #f74949 !important;
+}
+.noReply {
+  background-color: #fc9031 !important;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+.example-full-width {
+  width: 100%;
+}
+
+.jobDetail{
+  margin: 1%;
+}
+
+.return {
+    margin-top: 1%;
+    margin-right: 3%;
+    float: right;
+}
+
+.filter {
+  width: 30%;
+  margin-bottom: 20px;
+  /* float: right; */
+}

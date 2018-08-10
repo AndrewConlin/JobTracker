@@ -1,0 +1,53 @@
+<!-- <div class="card contact">
+    <div class="card-body">
+      <h5 class="card-title">{{contact.firstName}} {{contact.lastName}}
+        <span class="card-subtitle mb-2 text-muted"> ({{contact.position}}) </span>
+      </h5>
+      <p class="card-text"><em>Phone:</em> {{contact.phoneNumber}}</p>
+      <p class="card-text"><em>Email:</em> {{contact.email}}</p>
+      <p class="card-text"><em>Note:</em> {{contact.description}}</p>
+      <button class="btn btn-primary" (click)="editContact = contact">Edit</button>
+    </div>
+  </div> -->
+
+<div class="card company" *ngIf="!editCompany">
+  <div class="card-body">
+      <h3 class="card-title">{{company.name}}</h3>
+      <div id="addressInfo" class="card-text" *ngIf="company.address.street">
+        <h5>{{company.address.street}}</h5>
+        <h5>{{company.address.city}}, {{company.address.state}} {{company.address.zipCode}}</h5>
+      </div>
+      <p class="card-text"><a [href]="company.url">{{company.url}}</a></p>
+
+      <button class="btn btn-primary" (click)="editCompany = company">Edit</button>
+  </div>
+</div>
+
+<div *ngIf="editCompany" class="card company">
+  <form #editContactForm="ngForm" class="example-form card-body">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Name" name="name" [(ngModel)]="editCompany.name"/>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="URL"  name="url" [(ngModel)]="editCompany.url"/>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="Street"  name="street" [(ngModel)]="editCompany.address.street"/>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="Street2"  name="street2" [(ngModel)]="editCompany.address.street2"/>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="City"  name="city" [(ngModel)]="editCompany.address.city"/>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="State"  name="state" [(ngModel)]="editCompany.address.state"/>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="Zip Code"  name="zipCode" [(ngModel)]="editCompany.address.zipCode"/>
+      </mat-form-field>
+
+      <button class="btn btn-primary" (click)="updateCompany(editContactForm)">Save</button>
+      <button class="btn btn-warning" (click)="editCompany = null;">Cancel</button>
+    </form>
+</div>

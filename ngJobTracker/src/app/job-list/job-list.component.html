@@ -1,0 +1,164 @@
+<!-- view all jobs -->
+<div *ngIf="!selectedJob">
+  <label for="jobStatusFilter">Filter By Status:</label>
+  <select id="jobStatusFilter" class="form-control filter" name="jobStatus" [(ngModel)]="selectedStatus">
+    <option>All</option>
+    <option *ngFor="let jobStatus of statuses">{{jobStatus.status}}</option>
+  </select>
+
+  <table class="table table-bordered table-hover" *ngIf="jobs.length > 0">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Title</th>
+          <th colspan="2">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of jobs | statusFilter:selectedStatus" >
+          <td (click)="selectedJob = job">{{job.company.name}}</td>
+          <td>{{job.title}}</td>
+          <td>{{job.status.status}}</td>
+          <td><button class="btn btn-danger" (click)="deleteJob(board.id, job.id)">X</button></td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<!-- job information view -->
+<div *ngIf="selectedJob">
+  <mat-tab-group>
+    <mat-tab label="Job Details">
+      <!-- job details -->
+      <div class="tabContent" *ngIf="!editJob">
+        <div class="card jobDetail">
+            <div class="card-body">
+              <div class="card-title">
+                <mat-chip-list>
+                  <h3>{{selectedJob.company.name}}</h3>
+                  <mat-chip [ngClass]="getStatus(selectedJob)" selected>{{selectedJob.status.status}}</mat-chip>
+                </mat-chip-list>
+              </div>
+              <h4 class="card-subtitle mb-2 text-muted">{{selectedJob.title}}</h4>
+              <p class="card-text"><em>Salary:</em> {{selectedJob.salary || ''}}</p>
+              <p class="card-text"><em>Post Url:</em> <a [href]="selectedJob.postUrl">{{selectedJob.postUrl}}</a></p>
+              <p class="card-text"><em>Application Date:</em> {{selectedJob.applicationDate}}</p>
+              <p class="card-text"><em>Offer Date:</em> {{selectedJob.offerDate}}</p>
+
+              <p><em>Description:</em> {{selectedJob.description}}</p>
+              <button class="btn btn-primary" (click)="editJob = selectedJob">Edit</button>
+            </div>
+        </div>
+      </div>
+
+      <!-- edit job -->
+      <div class="tabContent" *ngIf="editJob">
+        <form #editJobForm="ngForm" class="example-form">
+            <mat-form-field>
+              <mat-select placeholder="Job Status" name="jobStatus" [ngModel]="editJob.status.status">
+                <mat-option *ngFor="let status of statuses" [value]="status.status">
+                  {{status.status}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Title" name="title" [ngModel]="editJob.title">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Salary" name="salary" [ngModel]="editJob.salary">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Job Url" name="url" [ngModel]="editJob.postUrl">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [matDatepicker]="applicationDate" placeholder="Application Date" name="applicationDate" [ngModel]="editJob.applicationDate" />
+              <mat-datepicker-toggle matSuffix [for]="applicationDate"></mat-datepicker-toggle>
+              <mat-datepicker #applicationDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [matDatepicker]="offerDate" placeholder="Offer Date" name="offerDate" [ngModel]="editJob.offerDate" />
+              <mat-datepicker-toggle matSuffix [for]="offerDate"></mat-datepicker-toggle>
+              <mat-datepicker #offerDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <textarea matInput placeholder="Description"  name="description" [ngModel]="editJob.description"></textarea>
+            </mat-form-field>
+            <button class="btn btn-primary" (click)="updateJob(editJobForm)">Save</button>
+            <button class="btn btn-warning" (click)="editJob = null;">Cancel</button>
+          </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="Company" >
+      <!-- company details -->
+      <div class="tabContent">
+        <app-company-detail [job]="selectedJob"></app-company-detail>
+      </div>
+    </mat-tab>
+    <mat-tab label="Contacts" >
+      <!-- contact list -->
+      <div class="tabContent">
+        <app-contact-list [job]="selectedJob"></app-contact-list>
+      </div>
+    </mat-tab>
+    <mat-tab label="Notes">
+      <!-- note list -->
+      <div class="tabContent">
+        <app-note-list [job]="selectedJob"></app-note-list>
+      </div>
+    </mat-tab>
+    <mat-tab label="Todos">
+      <!-- todo list -->
+      <div class="tabContent">
+        <app-todo-list [jobId]="selectedJob.id" ></app-todo-list>
+      </div>
+    </mat-tab>
+    <mat-tab label="Files">
+        <!-- todo list -->
+        <div class="tabContent">
+          <app-file-list [jobId]="selectedJob.id" ></app-file-list>
+        </div>
+      </mat-tab>
+  </mat-tab-group>
+  <button class="btn btn-warning return" (click)="selectedJob = null">View All Jobs</button>
+</div>
+
+<!-- create job modal -->
+<div *ngIf="!selectedJob">
+  <ng-template #content let-c="close()" let-d="dismiss()">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add a job</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #createJobForm="ngForm">
+          <div class="form-group">
+            <label for="typeahead-basic-companyName">Company Name</label>
+            <div class="input-group">
+              <input id="typeahead-basic-companyName" type="text" class="form-control" name="companyName" [(ngModel)]="model" [ngbTypeahead]="search"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="title">Job Title</label>
+            <div class="input-group">
+              <input id="title" class="form-control" name="title" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+              <label for="jobStatus">Job Status</label>
+              <div class="input-group">
+                <select id="jobStatus" class="form-control" name="jobStatus" ngModel>
+                    <option *ngFor="let jobStatus of statuses">{{jobStatus.status}}</option>
+                </select>
+              </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="createJob(createJobForm); c;">Save</button>
+      </div>
+    </ng-template>
+
+    <button class="btn btn-success" (click)="open(content)">+ Add Job</button>
+</div>

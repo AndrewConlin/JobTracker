@@ -1,0 +1,126 @@
+<!-- view all contact -->
+<div *ngIf="!editContact">
+  <div *ngFor="let contact of contacts">
+    <div class="card contact">
+      <div class="card-body">
+        <h5 class="card-title">{{contact.firstName}} {{contact.lastName}}
+          <span class="card-subtitle mb-2 text-muted"> ({{contact.position}}) </span>
+        </h5>
+        <p class="card-text"><em>Phone:</em> {{contact.phoneNumber}}</p>
+        <p class="card-text"><em>Email:</em> {{contact.email}}</p>
+        <p class="card-text"><em>Note:</em> {{contact.description}}</p>
+        <button class="btn btn-primary" (click)="editContact = contact">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- detail edit contact -->
+<div *ngIf="editContact">
+    <div *ngFor="let contact of contacts">
+      <div class="card contact" *ngIf="contact.id !== editContact.id">  <!-- non edit contacts -->
+        <div class="card-body">
+          <h5 class="card-title">{{contact.firstName}} {{contact.lastName}}
+            <span class="card-subtitle mb-2 text-muted"> ({{contact.position}}) </span>
+          </h5>
+          <p class="card-text"><em>Phone:</em> {{contact.phoneNumber}}</p>
+          <p class="card-text"><em>Email:</em> {{contact.email}}</p>
+          <p class="card-text"><em>Note:</em> {{contact.description}}</p>
+          <button class="btn btn-primary" (click)="editContact = contact" disabled>Edit</button>
+        </div>
+      </div>
+      <div class="card contact" *ngIf="contact.id === editContact.id">  <!-- edit contact -->
+        <div class="card-body">
+          <form #editContactForm="ngForm">
+            <h5 class="card-title">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="FirstName" name="firstName" [ngModel]="editContact.firstName">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="LastName" name="lastName" [ngModel]="editContact.lastName">
+              </mat-form-field>
+              <span class="card-subtitle mb-2 text-muted">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Position" name="position" [ngModel]="editContact.position">
+                </mat-form-field>
+              </span>
+            </h5>
+            <div class="card-text">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Phone Number" name="phoneNumber" [ngModel]="editContact.phoneNumber">
+              </mat-form-field>
+            </div>
+            <div class="card-text">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Email" name="email" [ngModel]="editContact.email">
+              </mat-form-field>
+            </div>
+            <div class="card-text">
+              <mat-form-field class="example-full-width">
+                  <textarea matInput placeholder="Description" name="description" [ngModel]="editContact.description"></textarea>
+              </mat-form-field>
+            </div>
+            <button class="btn btn-success" (click)="updateContact(editContactForm)">Save</button>
+            <button class="btn btn-danger" (click)="editContact = null;">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- create contact modal -->
+<div class="contactAdd">
+  <ng-template #content let-c="close()" let-d="dismiss()">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Create Contact</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #createContactForm="ngForm">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <div class="input-group">
+              <input id="firstName" class="form-control" name="firstName" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <div class="input-group">
+              <input id="lastName" class="form-control" name="lastName" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="position">Position</label>
+            <div class="input-group">
+              <input id="position" class="form-control" name="position" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <div class="input-group">
+              <input id="phoneNumber" class="form-control" name="phoneNumber" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-group">
+              <input id="email" class="form-control" name="email" ngModel>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <div class="input-group">
+              <input id="description" class="form-control" name="description" ngModel>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="createContact(createContactForm); c;">Save</button>
+      </div>
+    </ng-template>
+
+    <button class="btn btn-success" (click)="open(content)">+ Add Contact</button>
+  </div>
