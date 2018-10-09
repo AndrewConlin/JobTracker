@@ -1,8 +1,7 @@
+import { environment } from '../environments/environment';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { environment } from '../environments/environment';
-
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -10,46 +9,45 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-
   private url = environment.baseUrl;
 
   login(username, password) {
     const loginUser = {
-        'username': username,
-        'password': password
+      username: username,
+      password: password
     };
 
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+        // 'X-Requested-With': 'XMLHttpRequest'
+      }),
       observe: 'response' as 'response'
     };
 
-    return this.http
-      .post(`${this.url}login`, loginUser, httpOptions)
-      .pipe(
-        tap((res: HttpResponse<any>) => {
-          const authHeader = res.headers.get('authorization'); // get entire auth header
-          const token = authHeader.split(' ')[1];
+    return this.http.post(`${this.url}login`, loginUser, httpOptions).pipe(
+      tap((res: HttpResponse<any>) => {
+        const authHeader = res.headers.get('authorization'); // get entire auth header
+        const token = authHeader.split(' ')[1];
 
-          localStorage.setItem('token', token);
-          return res;
-        }),
-        catchError((err: any) => {
-          console.log(err);
-          return throwError('KABOOM');
-        })
-      );
+        localStorage.setItem('token', token);
+        return res;
+      }),
+      catchError((err: any) => {
+        console.log(err);
+        return throwError('KABOOM');
+      })
+    );
   }
 
   register(user) {
     // create request to register a new account
-    return this.http.post(`${this.url}auth/register`, user)
-    .pipe(
-        catchError((err: any) => {
-          console.log(err);
-          return throwError('KABOOM');
-        })
-      );
+    return this.http.post(`${this.url}auth/register`, user).pipe(
+      catchError((err: any) => {
+        console.log(err);
+        return throwError('KABOOM');
+      })
+    );
   }
 
   logout() {
@@ -67,6 +65,5 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient) {}
 }
