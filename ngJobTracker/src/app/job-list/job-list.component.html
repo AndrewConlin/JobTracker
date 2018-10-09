@@ -39,9 +39,9 @@
                   <mat-chip [ngClass]="getStatus(selectedJob)" selected>{{selectedJob.status.status}}</mat-chip>
                 </mat-chip-list>
               </div>
-              <h4 class="card-subtitle mb-2 text-muted">{{selectedJob.title}}</h4>
+              <h4 class="card-subtitle mb-2 text-muted"> {{selectedJob.title}}</h4>
               <p class="card-text"><em>Salary:</em> {{selectedJob.salary || ''}}</p>
-              <p class="card-text"><em>Post Url:</em> <a [href]="selectedJob.postUrl">{{selectedJob.postUrl}}</a></p>
+              <p class="card-text"><em>Post Url:</em> <a [href]="selectedJob.postUrl"> {{selectedJob.postUrl}}</a></p>
               <p class="card-text"><em>Application Date:</em> {{selectedJob.applicationDate}}</p>
               <p class="card-text"><em>Offer Date:</em> {{selectedJob.offerDate}}</p>
 

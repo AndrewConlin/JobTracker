@@ -21,6 +21,7 @@ public class JobTrackerRestApplication {
 	@Value("${aws_secret_access_key}")
 	private String secretAccessKey;
 	
+	
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
