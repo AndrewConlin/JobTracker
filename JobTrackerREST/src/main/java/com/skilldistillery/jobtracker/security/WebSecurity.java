@@ -36,6 +36,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 			.disable()
 			.authorizeRequests()
 			.antMatchers(SIGN_UP_URL).permitAll()
+			.antMatchers("/api/ping").permitAll()
 			.anyRequest().authenticated()
 			.and().addFilter(new JWTAuthenticationFilter(authenticationManager()))
 			.addFilter(new JWTAuthorizationFilter(authenticationManager()))

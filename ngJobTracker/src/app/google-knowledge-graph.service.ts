@@ -20,15 +20,15 @@ export class GoogleKnowledgeGraphService {
    Params = Params.append('indent', 'true');
 
     // Uncomment to enable API call
-    // return this.http.get(`${this.url}`, { params: Params })
-    //   .pipe(
-    //     catchError((err: any) => {
-    //      console.log(err);
-    //      return throwError('KABOOM');
-    //    })
-    //  );
+    return this.http.get(`${this.url}`, { params: Params })
+      .pipe(
+        catchError((err: any) => {
+         console.log(err);
+         return throwError('KABOOM');
+       })
+     );
 
-    return null;
+    // return null;
   }
 
   constructor(private http: HttpClient) { }
